@@ -1,0 +1,11 @@
+dist
+├─server
+|   ├─entry-server.js
+|   └vite.svg
+├─client
+|   ├─index.html
+|   ├─vite.svg
+|   ├─assets
+|   |   ├─index-89e3b089.js
+|   |   ├─index-94b61395.css
+|   |   └vue-5532db34.svg
