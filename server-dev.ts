@@ -55,12 +55,13 @@ async function createServer() {
       // 4. 渲染应用的 HTML。这假设 entry-server.js 导出的 `render`
       //    函数调用了适当的 SSR 框架 API。
       //    例如 ReactDOMServer.renderToString()
-      const { renderedHtml, state } = await render(url);
+      const { renderedHtml, state, ssrData } = await render(url);
 
       // 5. 注入渲染后的应用程序 HTML 到模板中。 模板渲染
       const html = template
         .replace(`<!--ssr-outlet-->`, renderedHtml)
-        .replace(`<!--pinia-state-->`, state);
+        .replace(`<!--pinia-state-->`, state)
+        .replace(`<!--ssr-data-->`, ssrData || {});
 
       // 6. 返回渲染后的 HTML。node http server 返回
       res.status(200).set({ "Content-Type": "text/html" }).end(html);

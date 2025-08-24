@@ -7,6 +7,7 @@ const { app, router, pinia } = createApp();
 // 注意：__INITIAL_STATE__需要在 src/shims-global.d.ts中定义
 if (window.__INITIAL_STATE__) {
   pinia.state.value = JSON.parse(window.__INITIAL_STATE__);
+  window.__SSR_DATA__ = JSON.parse(window.__SSR_DATA__);
 }
 
 router.beforeEach((to, from, next) => {

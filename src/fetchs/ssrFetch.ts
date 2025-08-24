@@ -4,32 +4,12 @@
  */
 
 import shttp from '../httpRequest/shttp';
+import queryComprehensiveInfoForSheinClub from '../mockJosn/queryComprehensiveInfoForSheinClub.json' 
+import primeInfoForClient from '../mockJosn/primeInfoForClient.json'
 
 export const getClubInfo = async (clubId: string) => {
   try {
-    return {
-        code: 0,
-        info: {
-            list: [
-                {
-                    id: clubId,
-                    name: "Example Club",
-                    description: "This is an example club for demonstration purposes.",
-                    members: 100,
-                    created_at: "2023-01-01T00:00:00Z",
-                    updated_at: "2023-01-02T00:00:00Z"
-                },
-                {
-                    id: clubId,
-                    name: "Example Club2",
-                    description: "This is an example club for demonstration purposes.",
-                    members: 100,
-                    created_at: "2023-01-01T00:00:00Z",
-                    updated_at: "2023-01-02T00:00:00Z"
-                }
-            ]
-        }
-    }
+    return queryComprehensiveInfoForSheinClub
     // java 层
     // const mid = req?.headers.mid
     const response = await shttp.post(`/clubs/${clubId}`, {
@@ -38,6 +18,19 @@ export const getClubInfo = async (clubId: string) => {
     return response;
   } catch (error) {
     console.error("Error fetching club info:", error);
+    throw error;
+  }
+}
+
+// 其他的 SSR 请求函数可以在这里定义
+// primeInfoForClient
+export const getPrimeInfoForClient = async (clubId: string) => {
+  try {
+    return primeInfoForClient
+    const response = await shttp.get(`/clubs/${clubId}/prime-info`);
+    return response;
+  } catch (error) {
+    console.error("Error fetching prime info for client:", error);
     throw error;
   }
 }
