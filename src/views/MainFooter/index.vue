@@ -1,6 +1,6 @@
 <template>
     <div class="prime2__sticky-footer">
-    <a class="btn">
+    <a class="btn" @click="joinClub">
         <span>
             {{ price }}
         </span>
@@ -15,6 +15,7 @@
 import { useProductStore } from '../../pinia/product';
 import { useClientInfoStore } from '../../pinia/clientInfo';
 import { computed } from 'vue';
+import joinClubHooks from '../../../Hooks/joinClubHooks';
 
 const productStore = useProductStore();
 const clientStore = useClientInfoStore();
@@ -30,6 +31,13 @@ const localPrice = computed(() => {
     if (!product || !product.product_price_info) return '0';
     return product.product_price_info.price_local_with_symbol;
 });
+
+const joinClub = async () => {
+    // 24年 vue ref footer.ref.joinClub
+    const { joinClub } = joinClubHooks();
+    await joinClub();
+    // 框架设计理念 react vue3 函数式组件 hooks理念
+};
 
 </script>
 

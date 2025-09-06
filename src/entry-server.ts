@@ -5,7 +5,7 @@ import { useProductStore } from "./pinia/product/index";
 import { useClientInfoStore } from "./pinia/clientInfo";
 
 export const render = async (url: string) => {
-  const { app, router, pinia } = createApp();
+  const { app, router, pinia } = createApp(true);
 
   // set the router to the desired URL before rendering
   await router.push(url);
