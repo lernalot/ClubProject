@@ -27,5 +27,6 @@ router.isReady().then(() => {
     // 在这里进行JSBridge相关操作
     console.log('JSBridge已准备就绪');
     window.brigeIsReady = true;
+    // bridge.registerHandler('alert', window.alert)
   });
 });

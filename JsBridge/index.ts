@@ -5,7 +5,12 @@ class JSBridge {
     constructor() {
         this.callbackId = 0;     // Unique identifier for callbacks
         this.callbacks = {};      // Store callback functions
-        this.handlers = {};       // Store registered handler functions
+        this.handlers = {
+            // alert: (data) => {
+            //     alert(data.message || 'Alert from JSBridge');
+            //     return { status: 'alertDisplayed' };
+            // }
+        };       // Store registered handler functions
         this.initialized = false; // Initialization status
 
         // Initialize the communication mechanism
@@ -118,7 +123,7 @@ class JSBridge {
      */
     invokeCallback(callbackId, data) {
         const callback = this.callbacks[callbackId];
-
+        console.log('Invoking callback with ID:', callbackId, 'Data:', this.callbacks, callback);
         if (callback && typeof callback === 'function') {
             try {
                 callback(data); // Execute the callback
@@ -239,6 +244,7 @@ function asyncClientOperation(data, callback) {
     const jsData = JSON.parse(data);
     const handlerName = jsData.handlerName;
     const res = dealDiffBridge(handlerName);
+    // window.jsBridge.invokeCallback(jsData.callbackId, res);
     
     // Simulate asynchronous processing (e.g., network requests)
     setTimeout(() => {
@@ -269,6 +275,8 @@ function dealDiffBridge(methodName = '') {
             return { status: 'openSucc', message: 'Cashier opened successfully.' };
         case 'cashierPaySucc':
             return { status: 'paySucc', message: 'Cashier payment successful.' };
+        case 'navigateToWeb':
+            return { status: 'navigated', message: 'Navigated to web page.', success: 1 };
         default:
             return { error: 'Unknown method' };
     }

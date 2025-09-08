@@ -16,11 +16,17 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/club",
     name: "club",
+    meta: { requiresAuth: true },
     component: () => import("../views/Index.vue"),
   },
   {
     path: "/saver",
     name: "saver",
+    component: () => import("../views/About.vue"),
+  },
+  {
+    path: "/login",
+    name: "Login",
     component: () => import("../views/About.vue"),
   },
   {
@@ -31,6 +37,8 @@ const routes: RouteRecordRaw[] = [
 ];
 
 export function createRouter() {
+  // beforeEach  afterEach
+
   return _createRouter({
     // use appropriate history implementation for server/client
     // import.meta.env.SSR is injected by Vite.

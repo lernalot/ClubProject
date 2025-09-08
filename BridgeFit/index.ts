@@ -2,13 +2,26 @@
  * 跨端适配工具类
  * 支持判断浏览器/APP WebView环境、处理不同端跳转、检测登录状态
  */
+// npm 包维护
+// app端自己去鉴权 端上 bridge去拿 交互流程 流程图
+// web端自己去鉴权 tokenCheck ajax 后端解jwt code响应码 
+// npm 包 
+
+import schttp from "../src/httpRequest/shttp";
+
+// 10个前端团队 npm包维护发布
+declare global {
+    interface Window {
+        jsBridge: any; // 假设JSBridge对象挂载在window上
+    }
+}
 class BridgeFit {
     // 缓存环境判断结果
     private isAppEnv: boolean | null = null;
     // 缓存登录状态
     private loginStatusCache: { [key: string]: boolean } = {};
     // APP环境标识（可根据实际情况修改）
-    private appUserAgents = ['MyAppAndroid', 'MyAppiOS', 'CustomAppWebview'];
+    private appUserAgents = ['MyAppAndroid', 'MyAppiOS', 'CustomAppWebview', 'AppleWebKit'];
 
     /**
      * 判断当前是否为APP WebView环境
@@ -26,6 +39,7 @@ class BridgeFit {
 
         const userAgent = window.navigator.userAgent.toLowerCase();
         this.isAppEnv = this.appUserAgents.some(agent =>
+            // o(n) 非常友好
             userAgent.includes(agent.toLowerCase())
         );
 
@@ -64,7 +78,7 @@ class BridgeFit {
         } catch (error) {
             console.error('跳转失败:', error);
             // 跳转失败时降级处理
-            this.browserNavigate(url, isNewWindow);
+            // this.browserNavigate(url, isNewWindow);
             return false;
         }
     }
@@ -179,7 +193,7 @@ class BridgeFit {
 
         return new Promise(resolve => {
             if (type === 'local') {
-                // 本地检查（快速）
+                // 本地检查（快速）jwt 时效性 token 10d after 10d 需要重新登录
                 window.jsBridge.callHandler('getLocalLoginStatus', {}, (status: boolean) => {
                     resolve(status);
                 });
@@ -196,7 +210,7 @@ class BridgeFit {
      * 浏览器环境下检查登录状态
      * @param type 检查类型
      */
-    private checkBrowserLoginStatus(type: 'local' | 'remote'): boolean {
+    private async checkBrowserLoginStatus(type: 'local' | 'remote'): boolean {
         if (typeof window === 'undefined') {
             return false;
         }
@@ -213,6 +227,16 @@ class BridgeFit {
         } else {
             // 这里简化处理，实际项目中应该调用接口检查
             console.warn('Remote login check in browser should be implemented with API call');
+            // ajax
+            return await schttp.get('/api/auth/status')
+                .then(response => {
+                    return response.data?.isLoggedIn || false;
+                })
+                .catch(error => {
+                    console.error('Failed to check remote login status:', error);
+                    return false;
+                });
+            // 由于是异步，这里返回false，实际应改为异步函数
             return false;
         }
     }

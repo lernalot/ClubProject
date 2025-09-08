@@ -38,7 +38,7 @@ const useJoinClub = () => {
     const extraInfo = await getcashierInfo({
       clubId: pageEnum.HOME,
       productId: activeProduct?.product_code || '',
-      price: activeProduct?.price || 0,
+      price: activeProduct?.product_price_info.arrival_price_with_symbol || 0,
     });
     if (!activeProduct) {
       console.error('No active product found for checkout');
@@ -48,7 +48,7 @@ const useJoinClub = () => {
     return {
       clubId: pageEnum.HOME,
       productId: activeProduct.product_code,
-      price: activeProduct.price,
+      price: activeProduct.product_price_info.arrival_price_with_symbol,
       currency: activeProduct.currency,
       extraInfo
     };
@@ -71,20 +71,20 @@ const useJoinClub = () => {
       cashierCallback(response);
       // Handle the response from the checkout process
     })
-    // if (bridgeFit.isAppWebview()) {
-    //   console.log('当前在APP环境');
-    //   jsBridge.callHandler('openCashier', params, (response) => {
-    //     console.log('Checkout response:', response);
-    //     cashierCallback(response);
-    //     // Handle the response from the checkout process
-    //   })
-    // } else {
-    //   console.log('当前在浏览器环境');
-    //   bridgeFit.navigate(`/pat?code=${params?.productId}`, { isNewWindow: true })
-    //     .then(success => {
-    //       if (success) console.log('跳转成功');
-    //     });
-    // }
+    if (!bridgeFit.isAppWebview()) {
+      console.log('当前在APP环境');
+      jsBridge.callHandler('openCashier', params, (response) => {
+        console.log('Checkout response:', response);
+        cashierCallback(response);
+        // Handle the response from the checkout process
+      })
+    } else {
+      console.log('当前在浏览器环境');
+      bridgeFit.navigate(`/pat?code=${params?.productId}`, { isNewWindow: true })
+        .then(success => {
+          if (success) console.log('跳转成功');
+        });
+    }
 
   }
 
