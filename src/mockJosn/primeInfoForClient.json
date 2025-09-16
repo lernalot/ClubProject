@@ -966,7 +966,7 @@
                 {
                     "floor_type_id": "EXCLUSIVE_DISCOUNTS",
                     "floor_seq": 3,
-                    "weight": 2
+                    "weight": 4
                 },
                 {
                     "floor_type_id": "EXCLUSIVE_CUSTOMER_SERVICE",

@@ -20,6 +20,7 @@ export const render = async (url: string) => {
   // 初始化store数据
   useProductStore(pinia).initProductList(clubInfo);
   useClientInfoStore(pinia).initClientInfo(clientInfo);
+  // initThemeSkinInfo
 
   // 注入vue ssr中的上下文对象
   const renderCtx: { modules?: string[] } = {};

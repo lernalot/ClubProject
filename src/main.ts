@@ -28,5 +28,12 @@ export const createApp = (isServer) => {
   app.use(router);
   const pinia = createPinia();
   app.use(pinia);
+  app.directive('expose', {
+    mounted(el, binding) {
+      
+      console.log('Directive value:', binding.value);
+      // 这里可以添加更多逻辑，比如将值暴露到全局状态或其他操作
+    }
+  });
   return { app, router, pinia };
 };

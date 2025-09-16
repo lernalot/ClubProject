@@ -2,6 +2,7 @@
     <div>
         <Headers />
         <CardList :packages="productList" title="产品套餐" subtitle="选择适合您的套餐" :initialIndex="0" />
+        <FloorContainer />
         <MainFooter />
     </div>
 </template>
@@ -11,15 +12,13 @@ import { storeToRefs } from "pinia";
 import Headers from "./Headers/index.vue";
 import CardList from "./CardList/index.vue";
 import MainFooter from "./MainFooter/index.vue";
+import FloorContainer from "./FloorContainer/index.vue";
 // 业务形式划分 vue3组合式Api 划分业务store
 import { useCounterStore } from "../pinia/count";
 import { useProductStore } from "../pinia/product";
-import { useClientInfoStore } from "../pinia/clientInfo";
 
 const counterStore = useCounterStore();
 const productStore = useProductStore();
-const { count } = storeToRefs(counterStore);
-const { increaseCount } = counterStore;
 const { productList } = storeToRefs(productStore);
 </script>
 
